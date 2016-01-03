@@ -1,3 +1,4 @@
 __pycache__
 .virtualenv
 *.mp3
+bower_components

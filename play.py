@@ -75,5 +75,5 @@ def stop_music():
     status = 'stop'
     pg.mixer.music.stop()
 
-def next():
+def next_music():
     pg.mixer.music.stop()

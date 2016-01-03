@@ -1,7 +1,7 @@
 import os
 import subprocess
 from flask import Flask, render_template, request, redirect, url_for, jsonify
-from play import load_files, play_music, set_volume, stop_music
+from play import load_files, play_music, set_volume, stop_music, next_music
 
 app = Flask(__name__)
 current_song = ''
@@ -49,6 +49,11 @@ def volume():
 @app.route('/stop')
 def stop():
   stop_music()
+  return redirect('/')
+
+@app.route('/next')
+def next():
+  next_music()
   return redirect('/')
 
 def music_name_format(music):

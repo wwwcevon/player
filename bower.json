@@ -1,0 +1,25 @@
+{
+  "name": "player",
+  "homepage": "https://github.com/wwwcevon/player",
+  "authors": [
+    "kevin <804625920@qq.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [
+    "es6"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "angularjs#~1.4.8",
+    "mobile-angular-ui": "~1.2.0-rc.3"
+  }
+}
