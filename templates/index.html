@@ -1,0 +1,14 @@
+<!doctype html>
+<title>Music</title>
+<h1>{{ current_song }}</h1>
+{% for d in music %}
+  <h3>{{ d['dir'] }}:</h3>
+  {% for m in d['files'] %}
+    <div style="margin-left: 20px">
+      <a href={{ url_for('play',music=m['file']) }}>{{ m['name'] }}</a>
+    </div>
+  {% endfor %}
+{% endfor %}
+<div style="margin-top: 30px">
+<a href={{ url_for('stop') }}>stop</a>
+</div>

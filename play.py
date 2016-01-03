@@ -1,32 +1,75 @@
+#!/usr/local/bin/ve python
+import glob
+import sys
+import os
 import pygame as pg
-def play_music(music_file, volume=0.8):
-    '''
-    stream music with mixer.music module in a blocking manner
-    this will stream the sound from disk while playing
-    '''
-    # set up the mixer
-    freq = 44100     # audio CD quality
-    bitsize = -16    # unsigned 16 bit
-    channels = 2     # 1 is mono, 2 is stereo
-    buffer = 2048    # number of samples (experiment to get best sound)
-    pg.mixer.init(freq, bitsize, channels, buffer)
-    # volume value 0.0 to 1.0
-    pg.mixer.music.set_volume(volume)
-    clock = pg.time.Clock()
-    try:
-        pg.mixer.music.load(music_file)
-        print("Music file {} loaded!".format(music_file))
-    except pg.error:
-        print("File {} not found! ({})".format(music_file, pg.get_error()))
-        return
+from time import sleep
+
+
+def load_files(dir, only_files=False):
+  music = []
+  if only_files:
+   for (dirpath, dirnames, filenames) in os.walk(dir):
+     for f in filenames:
+       music.append('{}/{}'.format(dirpath, f))
+   return music
+  for sub_dir in os.listdir(dir):
+    _dir = os.path.join(dir, sub_dir)
+    music.append({
+      'path': sub_dir,
+      'files': glob.glob('{}/*.mp3'.format(_dir))
+    })
+
+  return music
+
+
+def play_music(music):
+  try:
+    pg.mixer.music.load(music)
     pg.mixer.music.play()
-    while pg.mixer.music.get_busy():
-        # check if playback has finished
-        clock.tick(30)
-# pick a MP3 music file you have in the working folder
-# otherwise give the full file path
-# (try other sound file formats too)
-music_file = "1.mp3"
-# optional volume 0 to 1.0
-volume = 1
-play_music(music_file, volume)
+  except pg.error as e:
+    pass
+
+def stop_music():
+  pg.mixer.music.stop()
+
+if __name__ == "__main__":
+  music_dir = '/home/kevin/Mine/music'
+  music = []
+  status = 'stop'
+  current_song = 'None'
+  freq = 44100     # audio CD quality
+  bitsize = -16    # unsigned 16 bit
+  channels = 2     # 1 is mono, 2 is stereo
+  buffer = 2048    # number of samples (experiment to get best sound)
+  volume = 1
+  pg.mixer.init(freq, bitsize, channels, buffer)
+  pg.mixer.music.set_volume(volume)
+
+  while True:
+    if pg.mixer.music.get_busy() or status == 'stop':
+      command = input()
+      if command.startswith('play'):
+        current_song = command.split(':')[1]
+        music.append(current_song)
+        status = 'playing'
+      elif command == 'stop':
+        stop_music()
+        status = 'stop'
+      elif command == 'current_song':
+        sys.stdout.write(current_song)
+      elif command.startswith('set_volume'):
+        volume = command.split(':')[1]
+        pg.mixer.music.set_volume(volume)
+      sys.stdout.flush()
+
+    else:
+      if music == []:
+        music = load_files(music_dir, True)
+
+      if status == 'playing':
+        play_music(music.pop())
+
+
+
+
