@@ -6,9 +6,7 @@
   ],
   "description": "",
   "main": "",
-  "moduleType": [
-    "es6"
-  ],
+  "moduleType": [],
   "license": "MIT",
   "private": true,
   "ignore": [
