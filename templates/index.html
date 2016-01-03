@@ -1,6 +1,12 @@
 <!doctype html>
 <title>Music</title>
 <h1>{{ current_song }}</h1>
+<div style="margin-top: 30px">
+<a href={{ url_for('stop') }}>stop</a>
+<div>current_vol: {{ volume }}</div>
+<a href={{ url_for('volume', volume=0.1) }}>vol: 10%</a>
+<a href={{ url_for('volume', volume=-0.1) }}>vol: -10%</a>
+</div>
 {% for d in music %}
   <h3>{{ d['dir'] }}:</h3>
   {% for m in d['files'] %}
@@ -9,14 +15,3 @@
     </div>
   {% endfor %}
 {% endfor %}
-<div style="margin-top: 30px">
-<span>
-<a href={{ url_for('stop') }}>stop</a>
-</span>
-<span>
-<a href={{ url_for('volume', volume=1) }}>vol: 100%</a>
-<a href={{ url_for('volume', volume=0.5) }}>vol: 50%</a>
-<a href={{ url_for('volume', volume=0.1) }}>vol: 10%</a>
-</span>
-
-</div>

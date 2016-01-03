@@ -1,11 +1,12 @@
 import os
 import subprocess
 from flask import Flask, render_template, request, redirect, url_for, jsonify
-from play import load_files, play_music, set_volume
+from play import load_files, play_music, set_volume, stop_music
 
 app = Flask(__name__)
 current_song = ''
 music_dir = '/home/kevin/Mine/music'
+current_volume = 1
 
 
 @app.route('/')
@@ -23,6 +24,7 @@ def index():
          'file': f}
       )
   return render_template('index.html',
+      volume=current_volume,
       music=music,
       current_song=music_name_format(current_song))
 
@@ -38,15 +40,15 @@ def play():
 
 @app.route('/set_volume')
 def volume():
-  volume = float(request.args.get('volume', 1))
-  set_volume(volume)
+  global current_volume
+  current_volume += float(request.args.get('volume', 1))
+  set_volume(current_volume)
 
   return redirect('/')
 
 @app.route('/stop')
 def stop():
-  command = "stop\n"
-
+  stop_music()
   return redirect('/')
 
 def music_name_format(music):
