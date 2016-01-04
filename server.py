@@ -8,9 +8,8 @@ current_song = ''
 music_dir = '/home/kevin/Mine/music'
 current_volume = 1
 
-
-@app.route('/')
-def index():
+@app.route('/songs', methods=['POST'])
+def songs():
   music_files = load_files(music_dir)
   music = []
   for dir in music_files:
@@ -23,10 +22,12 @@ def index():
         {'name': music_name_format(f),
          'file': f}
       )
-  return render_template('index.html',
-      volume=current_volume,
-      music=music,
-      current_song=music_name_format(current_song))
+  return jsonify({'songs': music})
+
+
+@app.route('/')
+def index():
+  return render_template('index.html')
 
 @app.route('/play')
 def play():
