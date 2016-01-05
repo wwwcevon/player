@@ -56,6 +56,15 @@ app.controller('DirController', function($scope, $routeParams, $http) {
 });
 
 app.controller('SongController', function($scope, $http) {
+  $scope.nextSong = function() {
+    $http({
+      method: 'POST',
+      url: '/next'
+    }).then(function successCallback(response) {
+      current_song = '';
+    }, function errorCallback(response) {
+    });
+  };
   $scope.stopPlay = function() {
     $http({
       method: 'POST',
