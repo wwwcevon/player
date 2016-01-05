@@ -29,33 +29,33 @@ def songs():
 def index():
   return render_template('index.html')
 
-@app.route('/play')
+@app.route('/play', methods=['POST'])
 def play():
-  args = request.args
-  the_music = args.get('music')
+  the_music = request.json.get('song')
   global current_song
   current_song = the_music
+  print('music', the_music)
   play_music(the_music)
 
-  return redirect('/')
+  return jsonify({'status': 'success'})
 
-@app.route('/set_volume')
+@app.route('/set_volume', methods=['POST'])
 def volume():
   global current_volume
-  current_volume += float(request.args.get('volume', 1))
+  current_volume += float(request.json.get('volume', 0))
   set_volume(current_volume)
 
-  return redirect('/')
+  return jsonify({'current_volume': current_volume})
 
-@app.route('/stop')
+@app.route('/stop', methods=['POST'])
 def stop():
   stop_music()
-  return redirect('/')
+  return jsonify({'status': 'success'})
 
-@app.route('/next')
+@app.route('/next', methods=['POST'])
 def next():
   next_music()
-  return redirect('/')
+  return jsonify({'status': 'success'})
 
 def music_name_format(music):
   if type(music) is not list:
