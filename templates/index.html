@@ -13,10 +13,20 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="yes" />
 
 
-<body ng-app="Player">
-<div class="app">
-    <div class="navbar navbar-app navbar-absolute-top" onclick="location.href='#/';" >
-        <h1> Music <small> Player </small> </h1>
+<body ng-app="Player" ng-controller="MainController" ui-prevent-touchmove-defaults>
+<div ui-track-as-search-param='true' class="sidebar sidebar-left" ng-include="'static/sidebar.html'"></div>
+<div class="app" ui-swipe-right='Ui.turnOn("uiSidebarLeft")'
+             ui-swipe-left='Ui.turnOff("uiSidebarLeft")'>
+    <div class="navbar navbar-app navbar-absolute-top">
+        <div class="navbar-brand navbar-brand-center" ui-yied-to="title" onclick="location.href='#/';">
+        Music Player
+        </div>
+        <div class="btn-group pull-left">
+            <div class="btn sidebar-toggle" ui-toggle="uiSidebarLeft">
+                <i class="fa fa-bars"></i>
+                DISC
+            </div>
+        </div>
     </div>
     <div class="navbar navbar-app navbar-absolute-bottom" ng-controller="SongController">
         <div class="btn-group justified">
@@ -26,9 +36,7 @@
             <a class="btn btn-navbar" ng-click="increaseVol()"><i class="fa fa-volume-up fa-navbar"></i></a>
         </div>
     </div>
-
-
-    <div class='app-body' ng-controller="MainController">
+    <div class='app-body'>
       <div class='app-content'>
         <div class="ng-view"></div>
       </div>

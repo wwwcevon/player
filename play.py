@@ -17,6 +17,7 @@ volume = 1
 pg.mixer.init(freq, bitsize, channels, buffer)
 pg.mixer.music.set_volume(volume)
 status = 'stop'
+player = ''
 
 def load_files(dir, only_files=False):
     music = []
@@ -36,6 +37,7 @@ def load_files(dir, only_files=False):
 
 def play_music(song):
     global status
+    global player
     if pg.mixer.music.get_busy():
         stop_music()
     player = threading.Thread(target=_play, kwargs={'m':song})
@@ -48,27 +50,18 @@ def set_volume(volume):
 
 def _play(m):
     global status
-    other_music = load_files(music_dir, True)
-    try:
+    import os
+    other_music = load_files(os.path.split(m)[0], True)
+    pg.mixer.music.load(m)
+    pg.mixer.music.play()
+    m = random.choice(other_music)
+    pg.mixer.music.queue(m)
+    while status == 'playing' and pg.mixer.music.get_busy() == 0:
+        m = random.choice(other_music)
         pg.mixer.music.load(m)
         pg.mixer.music.play()
-        clock = pg.time.Clock()
-        while pg.mixer.music.get_busy() and status == 'playing':
-            clock.tick(1)
-
-    except pg.error as e:
-        pass
-    while status == 'playing':
-        m = random.choice(other_music)
-        try:
-            pg.mixer.music.load(m)
-            pg.mixer.music.play()
-            clock = pg.time.Clock()
-            while pg.mixer.music.get_busy():
-                clock.tick(1)
-
-        except pg.error as e:
-            pass
+        print(m)
+        pg.mixer.music.queue(m)
 
 def stop_music():
     global status
@@ -77,3 +70,5 @@ def stop_music():
 
 def next_music():
     pg.mixer.music.stop()
+    pg.mixer.music.play()
+

@@ -34,7 +34,6 @@ def play():
   the_music = request.json.get('song')
   global current_song
   current_song = the_music
-  print('music', the_music)
   play_music(the_music)
 
   return jsonify({'status': 'success'})

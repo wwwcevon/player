@@ -8,10 +8,10 @@ var current_song;
 var current_volume = 1;
 
 app.config(function($routeProvider) {
-  $routeProvider.when('/', {templateUrl: 'static/home.html'});
-  $routeProvider.when('/dir/:dir', {templateUrl: 'static/dir.html', controller: 'DirController'});
-  $routeProvider.when('/all-songs', {templateUrl: 'static/dir.html', controller: 'DirController'});
-  $routeProvider.otherwise({redirecTo: '/'});
+  $routeProvider.when('/', {templateUrl: 'static/dir.html', reloadOnSearch: false});
+  $routeProvider.when('/dir/:dir', {templateUrl: 'static/dir.html', controller: 'DirController', reloadOnSearch: false});
+  $routeProvider.when('/all-songs', {templateUrl: 'static/dir.html', controller: 'DirController', reloadOnSearch: false});
+  $routeProvider.otherwise({redirecTo: '/all-songs'});
 });
 
 app.controller('MainController', function($http, $scope) {
@@ -24,22 +24,34 @@ app.controller('MainController', function($http, $scope) {
     }).then(function successCallback(response) {
       songs = response.data.songs;
       angular.forEach(songs, function(value, key) {
-          dirs.push(value.dir);
+        dirs.push(value.dir);
+        if ($scope.songs === undefined) {
+          $scope.songs = [];
+        }
+        $scope.songs = $scope.songs.concat(value.files);
       });
       $scope.dirs = dirs;
     }, function errorCallback(response) {
     });
   }
+
+  $scope.playSong = function(song) {
+    current_song = song;
+    $http({
+      method: 'POST',
+      data: {'song': current_song.file},
+      url: '/play'
+    }).then(function successCallback(response) {
+    }, function errorCallback(response) {
+    });
+  };
 });
 
-app.controller('DirController', function($scope, $routeParams, $http) {
+app.controller('DirController', function($scope, $routeParams, $http, $rootScope) {
   var dir = $routeParams.dir;
   angular.forEach(songs, function(value, key) {
-    if (value.dir == dir || dir === undefined) {
-      if ($scope.songs === undefined) {
-        $scope.songs = [];
-      }
-      $scope.songs = $scope.songs.concat(value.files);
+    if (value.dir == dir) {
+      $scope.songs = value.files;
     }
   });
 
