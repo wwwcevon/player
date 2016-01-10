@@ -2,7 +2,6 @@
 import random
 import threading
 import glob
-import sys
 import os
 import pygame as pg
 from time import sleep
@@ -13,7 +12,7 @@ freq = 44100         # audio CD quality
 bitsize = -16        # unsigned 16 bit
 channels = 2         # 1 is mono, 2 is stereo
 buffer = 2048        # number of samples (experiment to get best sound)
-volume = 1
+volume = 0.1
 pg.mixer.init(freq, bitsize, channels, buffer)
 pg.mixer.music.set_volume(volume)
 status = 'stop'
@@ -54,14 +53,18 @@ def _play(m):
     other_music = load_files(os.path.split(m)[0], True)
     pg.mixer.music.load(m)
     pg.mixer.music.play()
-    m = random.choice(other_music)
-    pg.mixer.music.queue(m)
-    while status == 'playing' and pg.mixer.music.get_busy() == 0:
-        m = random.choice(other_music)
+    while status == 'playing':
+        if pg.mixer.music.get_busy():
+            sleep(1)
+            continue
+        other_music.remove(m)
+        last_song = random.choice(other_music)
+        other_music.append(m)
+        print(other_music)
+        m = last_song
         pg.mixer.music.load(m)
         pg.mixer.music.play()
         print(m)
-        pg.mixer.music.queue(m)
 
 def stop_music():
     global status
@@ -69,6 +72,6 @@ def stop_music():
     pg.mixer.music.stop()
 
 def next_music():
-    pg.mixer.music.stop()
-    pg.mixer.music.play()
+    if pg.mixer.music.get_busy():
+        pg.mixer.music.stop()
 
