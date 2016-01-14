@@ -6,4 +6,4 @@ install: pip bower
 pip:
 	ve pip install -r requirement.txt
 bower:
-	bower install
+	cd static && bower install
