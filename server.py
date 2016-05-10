@@ -6,7 +6,7 @@ from play import load_files, play_music, set_volume, stop_music, next_music
 app = Flask(__name__)
 current_song = ''
 music_dir = '/home/kevin/Mine/music'
-current_volume = 1
+current_volume = 0.1
 
 @app.route('/songs', methods=['POST'])
 def songs():

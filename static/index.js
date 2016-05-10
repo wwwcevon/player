@@ -90,7 +90,7 @@ app.controller('SongController', function($scope, $http) {
     $http({
       method: 'POST',
       url: '/set_volume',
-      data: {'volume': 0.1}
+      data: {'volume': 0.05}
     }).then(function successCallback(response) {
       current_volume = response.data.current_volume;
     }, function errorCallback(response) {
@@ -100,7 +100,7 @@ app.controller('SongController', function($scope, $http) {
     $http({
       method: 'POST',
       url: '/set_volume',
-      data: {'volume': -0.1}
+      data: {'volume': -0.05}
     }).then(function successCallback(response) {
       current_volume = response.data.current_volume;
     }, function errorCallback(response) {
