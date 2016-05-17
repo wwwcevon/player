@@ -17,6 +17,7 @@ pg.mixer.init(freq, bitsize, channels, buffer)
 pg.mixer.music.set_volume(volume)
 status = 'stop'
 player = ''
+current_song = '/home/kevin/Mine/music/五月天/01.突然好想你.mp3'
 
 def load_files(dir, only_files=False):
     music = []
@@ -62,6 +63,8 @@ def _play(m):
         other_music.append(m)
         print(other_music)
         m = last_song
+        global current_song
+        current_song = m
         pg.mixer.music.load(m)
         pg.mixer.music.play()
         print(m)
@@ -74,4 +77,7 @@ def stop_music():
 def next_music():
     if pg.mixer.music.get_busy():
         pg.mixer.music.stop()
+    else:
+        global current_song
+        play_music(current_song)
 
