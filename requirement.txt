@@ -1,3 +1,4 @@
 --index-url=http://pypi.douban.com/simple
 Flask
+requests
 hg+http://bitbucket.org/pygame/pygame
