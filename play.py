@@ -50,9 +50,11 @@ def set_volume(volume):
 
 def _play(m):
     global status
+    global current_song
     import os
     other_music = load_files(os.path.split(m)[0], True)
     pg.mixer.music.load(m)
+    current_song = m
     pg.mixer.music.play()
     while status == 'playing':
         if pg.mixer.music.get_busy():
@@ -63,7 +65,6 @@ def _play(m):
         other_music.append(m)
         print(other_music)
         m = last_song
-        global current_song
         current_song = m
         pg.mixer.music.load(m)
         pg.mixer.music.play()

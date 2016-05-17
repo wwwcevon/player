@@ -10,16 +10,12 @@ def main():
     while True:
         res = mac_scan(KEVIN_IPHONE_MAC_ADDR)
         if not is_online and res:
-            print(1)
             requests.post('http://127.0.0.1/next')
         elif is_online and res:
-            print(2)
             pass
         elif not is_online and not res:
-            print(3)
             pass
         elif is_online and not res:
-            print(4)
             requests.post('http://127.0.0.1/stop')
         is_online = res
 
